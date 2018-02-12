@@ -22,9 +22,32 @@ const int maxrand = 10;
 
 void fillMatrix(int matrix[rows][cols]) {
     srand(time(NULL));
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            matrix[i][j] = rand() % maxrand;
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            matrix[r][c] = rand() % maxrand;
         }
     }
+}
+
+void PrintMatrix(int matrix[rows][cols]) {
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            cout << matrix[r][c];
+            if (c != cols-1) cout << " | ";
+        }
+        cout << endl;
+        if (r != rows-1) {
+            for (int c = 0; c < cols; c++) {
+                cout << "-";
+                if (c != cols-1) cout << "---";
+            }
+            cout << endl;
+        }
+    }
+}
+
+int main() {
+    int matrix[rows][cols];
+    fillMatrix(matrix);
+    PrintMatrix(matrix);
 }
