@@ -14,6 +14,7 @@ void fillMatrix(int matrix[rows][cols]);
 void PrintMatrix(int matrix[rows][cols]);
 void transposeMatrix(int matrix[rows][cols]);
 void multiplyMatrix_I(int left[rows][cols], int right[rows][cols], int result[rows][cols]);
+void multiplyMatrix_R(int left[rows][cols], int right[rows][cols], int result[rows][cols]);
 
 int main() {
     int matrix[rows][cols];
@@ -27,15 +28,19 @@ int main() {
     int left[rows][cols];
     int right[rows][cols];
     int result[rows][cols];
+    int recurs[rows][cols];
     fillMatrix(left);
     fillMatrix(right);
     multiplyMatrix_I(left, right, result);
+    multiplyMatrix_R(left, right, recurs);
     cout << endl;
     PrintMatrix(left);
     cout << endl;
     PrintMatrix(right);
     cout << endl;
     PrintMatrix(result);
+    cout << endl;
+    PrintMatrix(recurs);
 }
 
 // ----------------------------------------------------------------------------
@@ -105,5 +110,31 @@ void multiplyMatrix_I(int left[rows][cols], int right[rows][cols], int result[ro
             }
             result[r][c] = t;
         }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Question 6 (15pts)
+
+void multiplyMatrix_R(int left[rows][cols], int right[rows][cols], int result[rows][cols]) {
+    static int r = 0, c = 0, i = 0, t = 0;
+    if (r >= rows) return;
+    else {
+        if (c < cols) {
+            if (i < rows) {
+                t += left[r][i] * right[i][c];
+                i++;
+                multiplyMatrix_R(left, right, result);
+            } else {
+                result[r][c] = t;
+            }
+            i = 0;
+            c++;
+            t = 0;
+            multiplyMatrix_R(left, right, result);
+        }
+        c = 0;
+        r++;
+        multiplyMatrix_R(left, right, result);
     }
 }
