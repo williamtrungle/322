@@ -14,16 +14,21 @@ void fillMatrix(int matrix[rows][cols]);
 void PrintMatrix(int matrix[rows][cols]);
 void transposeMatrix(int matrix[rows][cols]);
 void multiplyMatrix_I(int left[rows][cols], int right[rows][cols], int result[rows][cols]);
-void multiplyMatrix_R(int left[rows][cols], int right[rows][cols], int result[rows][cols]);
+void multiplyMatrix_r(int left[rows][cols], int right[rows][cols], int result[rows][cols]);
+void fillMatrix_p(int **matrix);
+void PrintMatrix_p(int **matrix);
+void transposeMatrix_p(int **matrix);
 
 int main() {
     int matrix[rows][cols];
     cout << "New matrix" << endl;
     fillMatrix(matrix);
     PrintMatrix(matrix);
+
     cout << endl << "Tranpose matrix" << endl;
     transposeMatrix(matrix);
     PrintMatrix(matrix);
+
     cout << endl << "Multiply iteratively matrix" << endl;
     int left[rows][cols];
     int right[rows][cols];
@@ -32,7 +37,7 @@ int main() {
     fillMatrix(left);
     fillMatrix(right);
     multiplyMatrix_I(left, right, result);
-    multiplyMatrix_R(left, right, recurs);
+    multiplyMatrix_r(left, right, recurs);
     cout << endl;
     PrintMatrix(left);
     cout << endl;
@@ -41,6 +46,17 @@ int main() {
     PrintMatrix(result);
     cout << endl;
     PrintMatrix(recurs);
+    cout << endl;
+
+    int **matrix_p = new int*[rows];
+    for (int i = 0; i < cols; i++ ) *(matrix_p+i) = new int[cols];
+    cout << "New pointer matrix" << endl;
+    fillMatrix_p(matrix_p);
+    PrintMatrix_p(matrix_p);
+
+    cout << endl << "Tranpose pointer matrix" << endl;
+    transposeMatrix_p(matrix_p);
+    PrintMatrix_p(matrix_p);
 }
 
 // ----------------------------------------------------------------------------
@@ -116,7 +132,7 @@ void multiplyMatrix_I(int left[rows][cols], int right[rows][cols], int result[ro
 // ----------------------------------------------------------------------------
 // Question 6 (15pts)
 
-void multiplyMatrix_R(int left[rows][cols], int right[rows][cols], int result[rows][cols]) {
+void multiplyMatrix_r(int left[rows][cols], int right[rows][cols], int result[rows][cols]) {
     static int r = 0, c = 0, i = 0, t = 0;
     if (r >= rows) return;
     else {
@@ -124,17 +140,56 @@ void multiplyMatrix_R(int left[rows][cols], int right[rows][cols], int result[ro
             if (i < rows) {
                 t += left[r][i] * right[i][c];
                 i++;
-                multiplyMatrix_R(left, right, result);
+                multiplyMatrix_r(left, right, result);
             } else {
                 result[r][c] = t;
             }
             i = 0;
             c++;
             t = 0;
-            multiplyMatrix_R(left, right, result);
+            multiplyMatrix_r(left, right, result);
         }
         c = 0;
         r++;
-        multiplyMatrix_R(left, right, result);
+        multiplyMatrix_r(left, right, result);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Question 7 (15 pts)
+
+void fillMatrix_p(int **matrix) {
+    srand(time(NULL));
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            *(*(matrix+r)+c) = rand() % maxrand;
+        }
+    }
+}
+
+void PrintMatrix_p(int **matrix) {
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            cout << *(*(matrix+r)+c);
+            if (c != cols-1) cout << "\t";
+        }
+        cout << endl;
+        if (r != rows-1) {
+            for (int c = 0; c < cols; c++) if (c != cols-1) cout << "\t";
+            cout << endl;
+        }
+    }
+}
+
+void transposeMatrix_p(int **matrix) {
+    int t;
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            if (r < c) {
+                t = *(*(matrix+r)+c);
+                *(*(matrix+r)+c) = *(*(matrix+c)+r);
+                *(*(matrix+c)+r) = t;
+            }
+        }
     }
 }
