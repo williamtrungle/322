@@ -1,2 +1,2 @@
 #!/bin/bash
-src/a1
+src/matrix
