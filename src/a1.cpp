@@ -18,6 +18,8 @@ void multiplyMatrix_r(int left[rows][cols], int right[rows][cols], int result[ro
 void fillMatrix_p(int **matrix);
 void PrintMatrix_p(int **matrix);
 void transposeMatrix_p(int **matrix);
+void fillMatrix_s(int matrix[rows * cols]);
+void PrintMatrix_s(int matrix[rows * cols]);
 
 int main() {
     int matrix[rows][cols];
@@ -57,6 +59,11 @@ int main() {
     cout << endl << "Tranpose pointer matrix" << endl;
     transposeMatrix_p(matrix_p);
     PrintMatrix_p(matrix_p);
+
+    int matrix_s[rows * cols];
+    cout << "New single matrix" << endl;
+    fillMatrix_s(matrix_s);
+    PrintMatrix_s(matrix_s);
 }
 
 // ----------------------------------------------------------------------------
@@ -88,12 +95,6 @@ void PrintMatrix(int matrix[rows][cols]) {
             if (c != cols-1) cout << "\t";
         }
         cout << endl;
-        if (r != rows-1) {
-            for (int c = 0; c < cols; c++) {
-                if (c != cols-1) cout << "\t";
-            }
-            cout << endl;
-        }
     }
 }
 
@@ -174,10 +175,6 @@ void PrintMatrix_p(int **matrix) {
             if (c != cols-1) cout << "\t";
         }
         cout << endl;
-        if (r != rows-1) {
-            for (int c = 0; c < cols; c++) if (c != cols-1) cout << "\t";
-            cout << endl;
-        }
     }
 }
 
@@ -192,4 +189,21 @@ void transposeMatrix_p(int **matrix) {
             }
         }
     }
+}
+
+// ----------------------------------------------------------------------------
+// Question 8 (15 pts)
+
+void fillMatrix_s(int matrix[rows * cols]) {
+    srand(time(NULL));
+    for (int rc = 0; rc < rows * cols; rc++) matrix[rc] = rand() % maxrand;
+}
+
+void PrintMatrix_s(int matrix[rows * cols]) {
+    for (int rc = 0; rc < rows * cols; rc++) {
+        if (rc != 0 && rc % rows == 0) cout << endl;
+        cout << matrix[rc];
+        if ((rc % cols)+1 != 0) cout << "\t";
+    }
+    cout << endl;
 }
