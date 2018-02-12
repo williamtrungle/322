@@ -40,13 +40,13 @@ int main() {
     fillMatrix(right);
     multiplyMatrix_I(left, right, result);
     multiplyMatrix_r(left, right, recurs);
-    cout << endl;
+    cout << endl << "Left matrix" << endl;
     PrintMatrix(left);
-    cout << endl;
+    cout << endl << "Right matrix" << endl;
     PrintMatrix(right);
     cout << endl;
     PrintMatrix(result);
-    cout << endl;
+    cout << endl << "Multiply recursive matrix" << endl;
     PrintMatrix(recurs);
     cout << endl;
 
