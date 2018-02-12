@@ -10,6 +10,20 @@ const int rows = 5;
 const int cols = 5;
 const int maxrand = 10;
 
+void fillMatrix(int matrix[rows][cols]);
+void PrintMatrix(int matrix[rows][cols]);
+void transposeMatrix(int matrix[rows][cols]);
+
+int main() {
+    int matrix[rows][cols];
+    cout << "New matrix" << endl;
+    fillMatrix(matrix);
+    PrintMatrix(matrix);
+    cout << endl << "Tranpose matrix" << endl;
+    transposeMatrix(matrix);
+    PrintMatrix(matrix);
+}
+
 // ----------------------------------------------------------------------------
 // Question 1 (5 pts)
 
@@ -29,6 +43,9 @@ void fillMatrix(int matrix[rows][cols]) {
     }
 }
 
+// ----------------------------------------------------------------------------
+// Question 3 (10 pts)
+
 void PrintMatrix(int matrix[rows][cols]) {
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < cols; c++) {
@@ -46,8 +63,18 @@ void PrintMatrix(int matrix[rows][cols]) {
     }
 }
 
-int main() {
-    int matrix[rows][cols];
-    fillMatrix(matrix);
-    PrintMatrix(matrix);
+// ----------------------------------------------------------------------------
+// Question 4 (15 pts)
+
+void transposeMatrix(int matrix[rows][cols]) {
+    int t;
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            if (r < c) {
+                t = matrix[r][c];
+                matrix[r][c] = matrix[c][r];
+                matrix[c][r] = t;
+            }
+        }
+    }
 }
