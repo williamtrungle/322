@@ -136,7 +136,21 @@ class DLLStructure {
     int GetTail() {
         return last->data;
     }
+    int GetSize() {
+        int size = 0;
+        Node *c = first;
+        while ((c)) {
+            size++;
+            c = c->next;
+        }
+        return size;
+    }
 };
+
+// ----------------------------------------------------------------------------
+// Question 10 (5pts)
+
+string q10 = "Ideally the value of the size of the list would be saved as a private field of the class, and be updated on every insertion/deletion method. This would reduce the O(n) size lookup downt to O(1).";
 
 
 int main() {
@@ -158,6 +172,8 @@ int main() {
     cout << "Delete 22: ";
     dll.Delete(22);
     dll.PrintDLL();
+    cout << "Get size: " << dll.GetSize() << endl;
+    cout << "Question 10:" << endl << q10 << endl;
     cout << "Initialize new DLLStructure and check if is empty: ";
     DLLStructure empty;
     if (empty.IsEmpty()) {
