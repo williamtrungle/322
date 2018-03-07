@@ -74,12 +74,30 @@ class DLLStructure {
             c = c->next;
         }
     }
+    void InsertBefore(int before, int value) {
+        this->InsertAfter(before, before);
+        this->InsertAfter(before, value);
+        Node *c = first;
+        while (c->data != before) {
+            if (c == NULL) {
+                break;
+            }
+            c = c->next;
+        }
+        if (c != NULL) {
+            c->prev->next = c->next;
+            c->next->prev = c->prev;
+            delete c;
+        }
+    }
 };
+
 
 int main() {
     int array[5] = {11,2,7,22,4};
     DLLStructure dll(array,5);
     dll.InsertAfter(7, 13);
+    dll.InsertBefore(7,26);
     dll.PrintDLL();
     return 0;
 }
