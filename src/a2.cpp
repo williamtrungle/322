@@ -145,6 +145,25 @@ class DLLStructure {
         }
         return size;
     }
+    int GetMax() {
+        int m = 0;
+        Node *c = first;
+        while ((c)) {
+            m = c->data > m ? c->data : m;
+            c = c->next;
+        }
+        return m;
+    }
+    int GetMin() {
+        int m = 0;
+        Node *c = first;
+        while ((c)) {
+            m = c->data < m ? c->data : m;
+            c = c->next;
+        }
+        return m;
+    }
+
 };
 
 // ----------------------------------------------------------------------------
@@ -152,6 +171,10 @@ class DLLStructure {
 
 string q10 = "Ideally the value of the size of the list would be saved as a private field of the class, and be updated on every insertion/deletion method. This would reduce the O(n) size lookup downt to O(1).";
 
+// ----------------------------------------------------------------------------
+// Question 11 (10pts)
+
+string q11 = "Similar to the GetSize case, the value of max and min should be saved as a field of the object, and be updated whenever an element is added or removed. In those case, we modify either value by simply comparing with the current max and min, which has a O(1) time complexity.";
 
 int main() {
     int array[5] = {11,2,7,22,4};
@@ -174,6 +197,8 @@ int main() {
     dll.PrintDLL();
     cout << "Get size: " << dll.GetSize() << endl;
     cout << "Question 10:" << endl << q10 << endl;
+    cout << "Get max and min: " << dll.GetMax() << ", " << dll.GetMin() << endl;
+    cout << "Question 11:" << endl << q11 << endl;
     cout << "Initialize new DLLStructure and check if is empty: ";
     DLLStructure empty;
     if (empty.IsEmpty()) {
