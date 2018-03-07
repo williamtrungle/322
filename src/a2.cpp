@@ -93,32 +93,34 @@ class DLLStructure {
             delete c;
         }
     }
+    void swap(Node *a, Node *b) {
+        Node *alpha = a->prev;
+        Node *beta = b->next;
+        if (&*a == &*first) {
+            first = b;
+        }
+        if (&*b == &*last) {
+            last = a;
+        }
+        if ((alpha)) { alpha->next = b; }
+        if ((beta)) { beta->prev = a; }
+        a->next = beta;
+        a->prev = b;
+        b->next = a;
+        b->prev = alpha;
+    }
     void Sort() {
         bool unsorted;
-        Node *c, *n, *ichi, *ni, *san, *shi;
+        Node *c;
         while (true) {
             unsorted = false;
-            c = first->next;
-            while (c != NULL) {
-                n = c->next;
-                if (c->data < c->prev->data) {
-                    ichi = c->prev->prev;
-                    ni = c->prev;
-                    san = c;
-                    shi = c->next;
-                    if (ichi != NULL) {
-                        ichi->next = san;
-                    }
-                    san->prev = ichi;
-                    if (shi != NULL) {
-                        shi->prev = ni;
-                    }
-                    ni->next = shi;
-                    ni->prev = san;
-                    san->next = ni;
+            c = first;
+            while ((c = c->next)) {
+                if (c->prev->data > c->data) {
+                    swap(c->prev, c);
                     unsorted = true;
+                    c = c->next;
                 }
-                c = n;
             }
             if (!unsorted) {
                 break;
@@ -127,6 +129,12 @@ class DLLStructure {
     }
     bool IsEmpty() {
         return first == NULL;
+    }
+    int GetHead() {
+        return first->data;
+    }
+    int GetTail() {
+        return last->data;
     }
 };
 
@@ -140,11 +148,15 @@ int main() {
     dll.InsertAfter(7, 13);
     dll.InsertBefore(7,26);
     dll.PrintDLL();
-    cout << "Delete 22: ";
-    dll.Delete(22);
-    dll.PrintDLL();
     cout << "Sort: ";
     dll.Sort();
+    dll.PrintDLL();
+    cout << "Get head: ";
+    cout << dll.GetHead() << endl;
+    cout << "Get tail: ";
+    cout << dll.GetTail() << endl;
+    cout << "Delete 22: ";
+    dll.Delete(22);
     dll.PrintDLL();
     cout << "Initialize new DLLStructure and check if is empty: ";
     DLLStructure empty;
