@@ -48,25 +48,38 @@ class DLLStructure {
     ~DLLStructure() {
         Node *c = first;
         Node *n;
-        while (c != last) {
+        while (c != NULL) {
             n = c->next;
             delete c;
             c = n;
         }
     }
-    void printDLL() {
+    void PrintDLL() {
         Node *c = first;
-        Node *n;
         do {
             cout << c->data << " ";
         } while ((c = c->next));
         cout << endl;
+    }
+    void InsertAfter(int after, int value) {
+        Node *c = first;
+        Node *n;
+        while (c != last) {
+            if (c->data == after) {
+                n = new Node(value, c, c->next);
+                c->next->prev = n;
+                c->next = n;
+                break;
+            }
+            c = c->next;
+        }
     }
 };
 
 int main() {
     int array[5] = {11,2,7,22,4};
     DLLStructure dll(array,5);
-    dll.printDLL();
+    dll.InsertAfter(7, 13);
+    dll.PrintDLL();
     return 0;
 }
