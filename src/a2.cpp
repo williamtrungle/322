@@ -102,5 +102,7 @@ int main() {
     dll.InsertAfter(7, 13);
     dll.InsertBefore(7,26);
     dll.PrintDLL();
+    dll.Delete(22);
+    dll.PrintDLL();
     return 0;
 }
