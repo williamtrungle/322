@@ -93,7 +93,7 @@ class DLLStructure {
             delete c;
         }
     }
-    void IsEmpty() {
+    bool IsEmpty() {
         return first == NULL;
     }
 };
@@ -107,5 +107,11 @@ int main() {
     dll.PrintDLL();
     dll.Delete(22);
     dll.PrintDLL();
+    DLLStructure empty;
+    if (empty.IsEmpty()) {
+        cout << "Yup" << endl;
+    } else {
+        cout << "Nope" << endl;
+    }
     return 0;
 }
