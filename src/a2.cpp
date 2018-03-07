@@ -93,6 +93,9 @@ class DLLStructure {
             delete c;
         }
     }
+    void IsEmpty() {
+        return first == NULL;
+    }
 };
 
 
