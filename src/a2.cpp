@@ -77,8 +77,11 @@ class DLLStructure {
     void InsertBefore(int before, int value) {
         this->InsertAfter(before, before);
         this->InsertAfter(before, value);
+        this->Delete(before);
+    }
+    void Delete(int value) {
         Node *c = first;
-        while (c->data != before) {
+        while (c->data != value) {
             if (c == NULL) {
                 break;
             }
