@@ -93,6 +93,38 @@ class DLLStructure {
             delete c;
         }
     }
+    void Sort() {
+        bool unsorted;
+        Node *c, *n, *ichi, *ni, *san, *shi;
+        while (true) {
+            unsorted = false;
+            c = first->next;
+            while (c != NULL) {
+                n = c->next;
+                if (c->data < c->prev->data) {
+                    ichi = c->prev->prev;
+                    ni = c->prev;
+                    san = c;
+                    shi = c->next;
+                    if (ichi != NULL) {
+                        ichi->next = san;
+                    }
+                    san->prev = ichi;
+                    if (shi != NULL) {
+                        shi->prev = ni;
+                    }
+                    ni->next = shi;
+                    ni->prev = san;
+                    san->next = ni;
+                    unsorted = true;
+                }
+                c = n;
+            }
+            if (!unsorted) {
+                break;
+            }
+        }
+    }
     bool IsEmpty() {
         return first == NULL;
     }
@@ -102,16 +134,24 @@ class DLLStructure {
 int main() {
     int array[5] = {11,2,7,22,4};
     DLLStructure dll(array,5);
+    cout << "Initialize new DLLStructure with values: ";
+    dll.PrintDLL();
+    cout << "Insert 13 after 7, and 26 before 7: ";
     dll.InsertAfter(7, 13);
     dll.InsertBefore(7,26);
     dll.PrintDLL();
+    cout << "Delete 22: ";
     dll.Delete(22);
     dll.PrintDLL();
+    cout << "Sort: ";
+    dll.Sort();
+    dll.PrintDLL();
+    cout << "Initialize new DLLStructure and check if is empty: ";
     DLLStructure empty;
     if (empty.IsEmpty()) {
-        cout << "Yup" << endl;
+        cout << "Empty!" << endl;
     } else {
-        cout << "Nope" << endl;
+        cout << "Not empty :(" << endl;
     }
     return 0;
 }
