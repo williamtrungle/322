@@ -5,7 +5,11 @@ if [ "$1" = "1" ]; then
 elif [ "$1" = "2" ]; then
     rm src/dll 2>/dev/null
     g++ src/a2.cpp -o src/dll
+elif [ "$1" = "3" ]; then
+    rm src/smartpointer 2>/dev/null
+    g++ src/a3.cpp -o src/smartpointer
 else
-    echo Error: accepted arguments are "1" "2"
-    false
+    g++ src/a1.cpp -o src/matrix
+    g++ src/a2.cpp -o src/dll
+    g++ src/a3.cpp -o src/smartpointer
 fi
