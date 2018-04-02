@@ -2,6 +2,8 @@
 // #260239181
 
 #include <iostream>
+#include <new>
+#include <string>
 using namespace std;
 
 // ----------------------------------------------------------------------------
@@ -17,84 +19,193 @@ using namespace std;
  */
 
 // ----------------------------------------------------------------------------
-// Question 2 (15 pts)
+// SmartPointer for integers
 
+template <typename T>
 class SmartPointer
 {
     public:
         SmartPointer();
-        SmartPointer(int value);
+        SmartPointer(T value);
         ~SmartPointer();
-        int getValue();
-        void setValue(int value);
+        T getValue();
+        void setValue(T value);
     private:
-        int *ptr = 0;
+        T *ptr = 0;
+        void allocate();
+        void allocate(T value);
+        void assertPositive(T value);
 };
 
-SmartPointer::SmartPointer()
+template <typename T>
+SmartPointer<T>::SmartPointer()
 {
-    ptr = new int;
+    allocate();
 }
 
-SmartPointer::SmartPointer(int value)
+template <typename T>
+SmartPointer<T>::SmartPointer(T value)
 {
-    ptr = new int(value);
+    assertPositive(value);
+    allocate(value);
 }
 
-SmartPointer::~SmartPointer()
+template <typename T>
+SmartPointer<T>::~SmartPointer()
 {
     delete ptr;
     ptr = NULL;
 }
 
-int SmartPointer::getValue()
+template <typename T>
+T SmartPointer<T>::getValue()
 {
     return *ptr;
 }
 
-void SmartPointer::setValue(int value)
+template <typename T>
+void SmartPointer<T>::setValue(T value)
 {
-    if (ptr)
-    {
-        delete ptr;
-    }
-    ptr = new int(value);
+    assertPositive(value);
+    if (ptr) delete ptr;
+    allocate(value);
 }
 
-int q1_1()
+template <typename T>
+void SmartPointer<T>::allocate()
+{
+    try
+    {
+        ptr = new T;
+    }
+    catch (bad_alloc& err)
+    {
+        string msg;
+        msg += "Not enough memory for SmartPointer to allocate a new: ";
+        msg += err.what();
+        throw(msg);
+    }
+}
+
+template <typename T>
+void SmartPointer<T>::allocate(T value)
+{
+    try
+    {
+        ptr = new T(value);
+    }
+    catch (bad_alloc& err)
+    {
+        string msg;
+        msg += "Not enough memory for SmartPointer to allocate a new: ";
+        msg += err.what();
+        throw(msg);
+    }
+}
+
+template <typename T>
+void SmartPointer<T>::assertPositive(T value)
+{
+    if (value < 0)
+    {
+        string msg;
+        msg += "Cannot assign postive value "; 
+        msg += to_string(value);
+        msg += " to SmartPointer";
+        throw(msg);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Tests
+
+// Test for Question 2
+int t1()
 {
     const int value = 11;
     int result;
-    SmartPointer sPointer(value);
+    SmartPointer<int> sPointer(value);
     result = sPointer.getValue();
     if (result != value)
     {
-        cout << "Error: (q1_1) got " << result << ", want " << value << endl;
+        cout << "Error: (t1) got " << result << ", want " << value << endl;
         return 0;
     }
     return 1;
 }
 
-int q1_2()
+// Test for Question 2
+int t2()
 {
     const int value = 133;
     int result;
-    SmartPointer sPointer;
-    sPointer.setValue(133);
+    SmartPointer<int> sPointer;
+    sPointer.setValue(value);
     result = sPointer.getValue();
     if (result != value)
     {
-        cout << "Error: (q1_2) got " << result << ", want " << value << endl;
+        cout << "Error: (t2) got " << result << ", want " << value << endl;
         return 0;
     }
     return 1;
 }
 
+// Test for Question 3
+int t3()
+{
+    SmartPointer<int> sPointer;
+    try
+    {
+        sPointer.setValue(-1);
+    }
+    catch (string &message)
+    {
+        return 1;
+    }
+    cerr << "Error: (t3) no exception thrown for negative value -1" << endl;
+    return 0;
+}
+
+// Test for Question 4
+int t4()
+{
+    const float value = 13.31;
+    float result;
+    SmartPointer<float> sPointer;
+    sPointer.setValue(value);
+    result = sPointer.getValue();
+    if (result != value)
+    {
+        cout << "Error: (t4) got " << result << ", want " << value << endl;
+        return 0;
+    }
+    return 1;
+}
+
+// ----------------------------------------------------------------------------
+// Test each question
+
+typedef int (*UnitTest) ();
+
 int main()
 {
-    int r = 1;
-    r = r && q1_1();
-    r = r && q1_2();
-    if (r) cout << "Success" << endl;
-    return !r;
+    UnitTest tests[] =
+    {
+        t1,
+        t2,
+        t3,
+        t4
+    };
+
+    bool success = true;
+    for (int i = 0; i < 4; i++)
+    {
+        if (!tests[i]())
+        {
+            success = false;
+            break;
+        }
+    }
+
+    if (success) cout << "Success" << endl;
 }
