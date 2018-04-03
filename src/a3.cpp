@@ -4,6 +4,9 @@
 #include <iostream>
 #include <new>
 #include <string>
+#include <string.h>
+#include <type_traits>
+#include <stdexcept>
 using namespace std;
 
 // ----------------------------------------------------------------------------
@@ -19,7 +22,7 @@ using namespace std;
  */
 
 // ----------------------------------------------------------------------------
-// SmartPointer for integers
+// SmartPointer for numeric types
 
 template <typename T>
 class SmartPointer
@@ -126,6 +129,63 @@ void SmartPointer<T>::assertPositive(T value)
         msg += " to SmartPointer";
         throw(msg);
     }
+}
+
+// ----------------------------------------------------------------------------
+// Question 6 (20pts)
+
+template <typename T>
+class SmartArray
+{
+    public:
+        int length;
+
+        SmartArray(int length);
+        ~SmartArray();
+        T& operator[](const int index)
+        {
+            if (index > length)
+                throw("Index out of bounds");
+            return ptr[index];
+        }
+    private:
+        T *ptr = NULL;
+        friend ostream& operator<<(ostream& os, const SmartArray &sa)
+        {
+            os << "[";
+            for (int i = 0; i < sa.length; i++)
+            {
+                os << sa.ptr[i];
+                if (i != sa.length-1)
+                    os << ", ";
+            }
+            os << "]";
+            return os;
+        }
+};
+
+template <typename T>
+SmartArray<T>::SmartArray(int length)
+{
+    try
+    {
+        ptr = new T[length];
+        this->length = length;
+    }
+    catch (bad_alloc& err)
+    {
+        string msg;
+        msg += "Not enough memory for SmartPointer to allocate a new: ";
+        msg += err.what();
+        throw(msg);
+    }
+}
+
+template <typename T>
+SmartArray<T>::~SmartArray()
+{
+    delete[] ptr;
+    ptr = NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -251,6 +311,27 @@ int t7()
     }
     return 1;
 }
+
+// Test for Question 6
+int t8()
+{
+    const int length = 5;
+    SmartArray<int> sArray(length);
+    for (int i = 0; i < length; i++)
+    {
+        sArray[i] = i*11;
+    }
+    try
+    {
+        cout << sArray << endl;
+        return 1;
+    }
+    catch (string &message)
+    {
+        cerr << message << endl;
+        return 0;
+    }
+}
 // ----------------------------------------------------------------------------
 // Test each question
 
@@ -266,18 +347,20 @@ int main()
         t4,
         t5,
         t6,
-        t7
+        t7,
+        t8
     };
 
-    bool success = true;
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < 8; i++)
     {
         if (!tests[i]())
         {
-            success = false;
             break;
+        }
+        else
+        {
+            cout << "Success test " << i << endl;
         }
     }
 
-    if (success) cout << "Success" << endl;
 }
