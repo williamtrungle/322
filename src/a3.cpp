@@ -35,6 +35,18 @@ class SmartPointer
         void allocate();
         void allocate(T value);
         void assertPositive(T value);
+        friend SmartPointer operator+(const SmartPointer &self, const SmartPointer &other)
+        {
+            return SmartPointer(*self.ptr + *other.ptr);
+        }
+        friend SmartPointer operator-(const SmartPointer &self, const SmartPointer &other)
+        {
+            return SmartPointer(*self.ptr - *other.ptr);
+        }
+        friend SmartPointer operator*(const SmartPointer &self, const SmartPointer &other)
+        {
+            return SmartPointer(*self.ptr * *other.ptr);
+        }
 };
 
 template <typename T>
@@ -182,6 +194,63 @@ int t4()
     return 1;
 }
 
+// Test for Question 5
+int t5()
+{
+    const float v1 = 1.5;
+    const float v2 = 2.5;
+    SmartPointer<float> sPointer1;
+    SmartPointer<float> sPointer2;
+    sPointer1.setValue(v1);
+    sPointer2.setValue(v2);
+    SmartPointer<float> sPointer3 = sPointer1 + sPointer2;
+    float expected = v1+v2;
+    float result = sPointer3.getValue();
+    if (expected != result)
+    {
+        cout << "Error: (t5) got " << result << ", want " << expected << endl;
+        return 0;
+    }
+    return 1;
+}
+
+int t6()
+{
+    const float v1 = 11.0;
+    const float v2 = 5.5;
+    SmartPointer<float> sPointer1;
+    SmartPointer<float> sPointer2;
+    sPointer1.setValue(v1);
+    sPointer2.setValue(v2);
+    SmartPointer<float> sPointer3 = sPointer1 - sPointer2;
+    float expected = v1-v2;
+    float result = sPointer3.getValue();
+    if (expected != result)
+    {
+        cout << "Error: (t6) got " << result << ", want " << expected << endl;
+        return 0;
+    }
+    return 1;
+}
+
+int t7()
+{
+    const float v1 = 1.5;
+    const float v2 = 2.5;
+    SmartPointer<float> sPointer1;
+    SmartPointer<float> sPointer2;
+    sPointer1.setValue(v1);
+    sPointer2.setValue(v2);
+    SmartPointer<float> sPointer3 = sPointer1 * sPointer2;
+    float expected = v1*v2;
+    float result = sPointer3.getValue();
+    if (expected != result)
+    {
+        cout << "Error: (t7) got " << result << ", want " << expected << endl;
+        return 0;
+    }
+    return 1;
+}
 // ----------------------------------------------------------------------------
 // Test each question
 
@@ -194,11 +263,14 @@ int main()
         t1,
         t2,
         t3,
-        t4
+        t4,
+        t5,
+        t6,
+        t7
     };
 
     bool success = true;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 7; i++)
     {
         if (!tests[i]())
         {
